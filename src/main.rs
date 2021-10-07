@@ -4,11 +4,8 @@
 use bl602_hal as hal;
 use core::fmt::Write;
 use embedded_hal::delay::blocking::DelayMs;
-use embedded_hal::digital::blocking::{OutputPin, ToggleableOutputPin};
 use hal::{
     clock::{Strict, SysclkFreq, UART_PLL_FREQ},
-    delay::McycleDelay,
-    gpio::{Output, PullDown},
     pac,
     prelude::*,
     serial::*,
@@ -49,7 +46,7 @@ fn main() -> ! {
     serial.write_str("Debug Serial Initialized...\r\n").ok();
     loop {
         // Send a message every second while the device is running:
-        serial.write_str("Device is operating properly\r\n");
+        serial.write_str("Device is operating properly\r\n").ok();
         d.delay_ms(1000).ok();
     }
 }
