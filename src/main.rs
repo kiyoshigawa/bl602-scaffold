@@ -10,6 +10,7 @@ use hal::{
     prelude::*,
     serial::*,
 };
+use heapless::String;
 use panic_halt as _;
 
 #[riscv_rt::entry]
@@ -44,9 +45,14 @@ fn main() -> ! {
     let mut d = bl602_hal::delay::McycleDelay::new(clocks.sysclk().0);
 
     serial.write_str("Debug Serial Initialized...\r\n").ok();
+    let mut i = 0_u32;
     loop {
+        i += 1;
         // Send a message every second while the device is running:
-        serial.write_str("Device is operating properly\r\n").ok();
+        serial.write_str("We've been through the main loop ").ok();
+        let count = String::<20>::from(i);
+        let _ = serial.write_str(count.as_str());
+        serial.write_str(" times.\r\n").ok();
         d.delay_ms(1000).ok();
     }
 }
