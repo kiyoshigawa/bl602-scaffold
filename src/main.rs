@@ -49,10 +49,13 @@ fn main() -> ! {
     loop {
         i += 1;
         // Send a message every second while the device is running:
-        serial.write_str("We've been through the main loop ").ok();
-        let count = String::<20>::from(i);
-        let _ = serial.write_str(count.as_str());
-        serial.write_str(" times.\r\n").ok();
+        let mut debug_string = String::<2048>::from("DEBUG: ");
+        if let _ = write!(
+            debug_string,
+            "We've been through the main loop {} times, now with fancy formatted string powers.\r\n",
+            i
+        ) { serial.write_str(debug_string.as_str()); }
+
         d.delay_ms(1000).ok();
     }
 }
