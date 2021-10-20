@@ -10,12 +10,11 @@ use hal::{
     prelude::*,
     serial::*,
 };
-use heapless::String;
 use panic_halt as _;
 
 #[riscv_rt::entry]
 fn main() -> ! {
-    //take control of the device peripherals:
+    // Take control of the device peripherals
     let dp = pac::Peripherals::take().unwrap();
     let mut gpio_pins = dp.GLB.split();
 
@@ -44,18 +43,12 @@ fn main() -> ! {
     // Create a blocking delay function based on the current cpu frequency
     let mut d = bl602_hal::delay::McycleDelay::new(clocks.sysclk().0);
 
-    serial.write_str("Debug Serial Initialized...\r\n").ok();
+    writeln!(serial, "Debug Serial Initialized...\r\n").ok();
     let mut i = 0_u32;
     loop {
         i += 1;
         // Send a message every second while the device is running:
-        let mut debug_string = String::<2048>::from("DEBUG: ");
-        if let _ = write!(
-            debug_string,
-            "We've been through the main loop {} times, now with fancy formatted string powers.\r\n",
-            i
-        ) { serial.write_str(debug_string.as_str()); }
-
+        writeln!(serial, "We've looped {} times.", i).ok();
         d.delay_ms(1000).ok();
     }
 }
