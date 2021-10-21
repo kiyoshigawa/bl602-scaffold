@@ -43,12 +43,12 @@ fn main() -> ! {
     // Create a blocking delay function based on the current cpu frequency
     let mut d = bl602_hal::delay::McycleDelay::new(clocks.sysclk().0);
 
-    writeln!(serial, "Debug Serial Initialized...\r\n").ok();
+    writeln!(serial, "Debug Serial Initialized...\r").ok();
     let mut i = 0_u32;
     loop {
         i += 1;
         // Send a message every second while the device is running:
-        writeln!(serial, "We've looped {} times.", i).ok();
+        writeln!(serial, "We've looped {} times.\r", i).ok();
         d.delay_ms(1000).ok();
     }
 }
